@@ -1,6 +1,8 @@
 # News-to-Reel Architecture Pack
 
-Design notes for an AI pipeline that turns a short Urdu news report into a 1–2 minute vertical (9:16) news reel with an AI reporter. **SaaS path only** (ElevenLabs + HeyGen + Flux + Remotion).
+Design notes for an AI pipeline that turns a short Urdu news report into a 1–2 minute vertical (9:16) news reel with an AI reporter.  
+
+Planned for now: (ElevenLabs + HeyGen + Flux + Remotion). [my personal choice based on accuracy of these models]
 
 ## Files
 
@@ -14,6 +16,6 @@ News text → [Pre-proc] → [LLM script] → [TTS + Images + Captions] →
             [Reporter avatar + lip sync] → [Compositor] → [QA gate] → MP4 reel
 ```
 
-- **SaaS path (ElevenLabs + HeyGen + Flux + Remotion):** ~5–7 weeks to v1.
+- **SaaS path (ElevenLabs + HeyGen + Flux + Remotion):** ~5 weeks to v1.
 
-Biggest time sinks: visual consistency across scenes, factual-faithfulness evals, sensitivity guardrails, and RTL/Nastaliq typography.
+Biggest time sinks: visual consistency across scenes, sensitivity guardrails.
