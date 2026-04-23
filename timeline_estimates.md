@@ -28,7 +28,6 @@ Week 1:    [Pre-proc] → [Script gen v0] → [TTS wired]
 Week 2:    [Script gen v1 + guardrails] → [Image gen + style anchor]
 Week 3:    [Avatar/lip sync (HeyGen)] → [Captions + RTL fonts]
 Week 4–5:  [Compositor + 9:16 templates] → [QA gate] 
-Week 6–7:  [Eval harness, prompt iteration, polish on 20 real stories]
 ```
 
 
