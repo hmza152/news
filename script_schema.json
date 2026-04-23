@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NewsReelScript",
+  "description": "Structured output of the script-generation LLM (Module 2). Total scene durations must sum to 60-120 seconds.",
+  "type": "object",
+  "required": ["story_id", "language", "headline", "scenes"],
+  "properties": {
+    "story_id": { "type": "string" },
+    "language": { "type": "string", "enum": ["ur", "en"] },
+    "headline": { "type": "string", "maxLength": 120 },
+    "source_attribution": { "type": "string" },
+    "total_duration_s": { "type": "number", "minimum": 60, "maximum": 120 },
+    "scenes": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "required": [
+          "scene_id",
+          "duration_s",
+          "narration_urdu",
+          "on_screen_text",
+          "b_roll_prompt",
+          "shot_type",
+          "mood"
+        ],
+        "properties": {
+          "scene_id": { "type": "integer", "minimum": 1 },
+          "duration_s": { "type": "number", "minimum": 2, "maximum": 15 },
+          "narration_urdu": { "type": "string" },
+          "on_screen_text": { "type": "string" },
+          "b_roll_prompt": {
+            "type": "string",
+            "description": "T2I prompt for background visual. Must avoid graphic content, minors, real-person likenesses."
+          },
+          "shot_type": {
+            "type": "string",
+            "enum": ["wide", "medium", "close-up", "reporter", "title-card"]
+          },
+          "mood": {
+            "type": "string",
+            "enum": ["somber", "tense", "neutral", "hopeful", "urgent"]
+          },
+          "negative_prompt_extra": { "type": "string" }
+        }
+      }
+    },
+    "guardrail_checks": {
+      "type": "object",
+      "properties": {
+        "entities_in_source": { "type": "boolean" },
+        "no_speculation": { "type": "boolean" },
+        "sensitivity_passed": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+News-to-Reel Pipeline — AI Architecture (ASCII)
+
+┌──────────────────────────────────────────────────────────────────────┐
+│                       INPUT: Raw news report (Urdu)                  │
+│         (text from Slack / RSS / scraper / manual paste)             │
+└──────────────────────────────┬───────────────────────────────────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  1. PRE-PROCESSING & NORMALIZATION                                   │
+│     • Language detect, clean boilerplate                             │
+│     • De-duplicate Story 1 / 2 / 3 → canonical Story object          │
+│     • Optional Urdu→English mirror for downstream models             │
+└──────────────────────────────┬───────────────────────────────────────┘
+                               ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  2. SCRIPT GENERATION  (LLM — Claude / GPT-4 class)                  │
+│     Structured per-scene JSON: {scene_id, duration_s,                │
+│       narration_urdu, on_screen_text, b_roll_prompt,                 │
+│       shot_type, mood}                                               │
+│     Guardrails: entity faithfulness, no speculation, sensitivity     │
+└──────────────────────────────┬───────────────────────────────────────┘
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+   ┌──────────────────┐ ┌──────────────┐ ┌────────────────────┐
+   │ 3a. VISUAL PLAN  │ │ 3b. TTS      │ │ 3c. CAPTIONS /     │
+   │ T2I prompts +    │ │ Urdu cloned  │ │ LOWER-THIRDS       │
+   │ style anchor     │ │ reporter     │ │ whisperX align +   │
+   │ + neg prompts    │ │ voice + word │ │ RTL Urdu burn-in   │
+   │                  │ │ timestamps   │ │                    │
+   └────────┬─────────┘ └──────┬───────┘ └─────────┬──────────┘
+            ▼                  │                   │
+   ┌──────────────────┐        │                   │
+   │ 4. IMAGE GEN     │        │                   │
+   │ Flux/SDXL/Imagen │        │                   │
+   │ + I2V motion     │        │                   │
+   │ (Runway/Kling)   │        │                   │
+   └────────┬─────────┘        ▼                   │
+            │        ┌────────────────────┐        │
+            │        │ 5. REPORTER AVATAR │        │
+            │        │   + LIP SYNC       │        │
+            │        │ SaaS: HeyGen/D-ID  │        │
+            │        │ OSS:  Wav2Lip /    │        │
+            │        │       MuseTalk     │        │
+            │        └─────────┬──────────┘        │
+            └──────────────────┼───────────────────┘
+                               ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  6. VIDEO COMPOSITOR  (Remotion / MoviePy / FFmpeg)                  │
+│     9:16 1080×1920, layered: bg b-roll → reporter PIP → captions     │
+│     → lower-thirds → music; cuts driven by TTS word timestamps       │
+└──────────────────────────────┬───────────────────────────────────────┘
+                               ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  7. QA GATE  (vision-LLM + auto checks)                              │
+│     duration ∈ [60,120]s, -14 LUFS, entity check, sensitivity scan   │
+└──────────────────────────────┬───────────────────────────────────────┘
+                               ▼
+                ┌──────────────────────────────┐
+                │  OUTPUT: MP4 reel (9:16)     │
+                │  → S3 / Drive / IG publisher │
+                └──────────────────────────────┘
