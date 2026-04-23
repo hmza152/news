@@ -2,7 +2,7 @@ News-to-Reel Pipeline — AI Architecture (ASCII)
 
 ┌──────────────────────────────────────────────────────────────────────┐
 │                       INPUT: Raw news report (Urdu)                  │
-│         (text from Slack / RSS / scraper / manual paste)             │
+│                         (scraper / manual paste)             
 └──────────────────────────────┬───────────────────────────────────────┘
                                │
                                ▼
@@ -14,19 +14,19 @@ News-to-Reel Pipeline — AI Architecture (ASCII)
 └──────────────────────────────┬───────────────────────────────────────┘
                                ▼
 ┌──────────────────────────────────────────────────────────────────────┐
-│  2. SCRIPT GENERATION  (LLM — Claude / GPT-4 class)                  │
+│  2. SCRIPT GENERATION  (LLM  / GPT )                                 │
 │     Structured per-scene JSON: {scene_id, duration_s,                │
 │       narration_urdu, on_screen_text, b_roll_prompt,                 │
 │       shot_type, mood}                                               │
-│     Guardrails: entity faithfulness, no speculation, sensitivity     │
+│     Guardrails: sensitivity     │
 └──────────────────────────────┬───────────────────────────────────────┘
               ┌────────────────┼────────────────┐
               ▼                ▼                ▼
    ┌──────────────────┐ ┌──────────────┐ ┌────────────────────┐
    │ 3a. VISUAL PLAN  │ │ 3b. TTS      │ │ 3c. CAPTIONS /     │
-   │ T2I prompts +    │ │ Urdu cloned  │ │ LOWER-THIRDS       │
-   │ style anchor     │ │ reporter     │ │ whisperX align +   │
-   │ + neg prompts    │ │ voice + word │ │ RTL Urdu burn-in   │
+   │ T2I prompts      │ │ Urdu cloned  │ │ 
+   │                  │ reporter       │ │ whisperX align    │
+   │ + neg prompts    │ │ voice + word │ │   
    │                  │ │ timestamps   │ │                    │
    └────────┬─────────┘ └──────┬───────┘ └─────────┬──────────┘
             ▼                  │                   │
@@ -39,7 +39,7 @@ News-to-Reel Pipeline — AI Architecture (ASCII)
             │        ┌────────────────────┐        │
             │        │ 5. REPORTER AVATAR │        │
             │        │   + LIP SYNC       │        │
-            │        │ SaaS: HeyGen/D-ID  │        │
+            │        │   
             │        │ OSS:  Wav2Lip /    │        │
             │        │       MuseTalk     │        │
             │        └─────────┬──────────┘        │
@@ -53,10 +53,10 @@ News-to-Reel Pipeline — AI Architecture (ASCII)
                                ▼
 ┌──────────────────────────────────────────────────────────────────────┐
 │  7. QA GATE  (vision-LLM + auto checks)                              │
-│     duration ∈ [60,120]s, -14 LUFS, entity check, sensitivity scan   │
+│     duration  [60,120]s, entity check, sensitivity scan              │
 └──────────────────────────────┬───────────────────────────────────────┘
                                ▼
                 ┌──────────────────────────────┐
                 │  OUTPUT: MP4 reel (9:16)     │
-                │  → S3 / Drive / IG publisher │
+                │ 
                 └──────────────────────────────┘
